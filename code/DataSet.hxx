@@ -10,6 +10,7 @@
 #define DATASET_HXX
 
 #include "DataSet.h"
+#include "LinearRegression.h"
 
 /*
  * Implementación del método addDataPoint
@@ -56,6 +57,8 @@ LinearRegression<T> DataSet<T>::findBestModel(const std::string &metric)
     if (models.empty())
         throw std::runtime_error("No hay modelos disponibles para evaluar.");
     // TODO #8: Implementar la función findBestModel.
+    LinearRegression<T> bestModel;
+    return bestModel;
 }
 
 #endif // DATASET_HXX
