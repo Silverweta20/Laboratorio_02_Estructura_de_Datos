@@ -20,7 +20,8 @@
 template <typename T>
 void DataSet<T>::addDataPoint(T x, T y)
 {
-    // TODO #01: Implementar la inserción ordenada de puntos de datos en la estructura lineal. 
+    // TODO #01: Implementar la inserción ordenada de puntos de datos en la estructura lineal.
+    dataPoints.push_back(DataPoint<T>(x, y));
 }
 
 /*
@@ -33,6 +34,7 @@ template <typename T>
 void DataSet<T>::addModel(double slope, double intercept)
 {
     // TODO #02: Implementar la inserción de modelos de regresión en la lista.
+    models.push_back(LinearRegression<T>(slope, intercept));
 }
 
 /*

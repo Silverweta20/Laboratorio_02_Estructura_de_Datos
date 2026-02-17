@@ -42,7 +42,7 @@ void EvaluationSystem<T>::printResults() {
     int index = 1;
     for (typename std::list<LinearRegression<T>>::const_iterator it = dataSet.models.begin(); it != dataSet.models.end(); ++it) {
         std::cout << "Modelo " << index++ << ":\n";
-        std::cout << "  Ecuación del modelo: y = " << it->getSlope() << " x + " << it->getIntercept() << "\n";
+        std::cout << "  Ecuacion del modelo: y = " << it->getSlope() << " x + " << it->getIntercept() << "\n";
         
         if (it->isMAECalculated()) {
             std::cout << " -> MAE: " << it->getMAE() << "\n";
@@ -62,7 +62,7 @@ void EvaluationSystem<T>::printBestModels() {
     try {
         LinearRegression<T> bestModelMAE = this->dataSet.findBestModel("MAE");
         std::cout << "Mejor modelo basado en MAE:\n";
-        std::cout << "  Ecuación del modelo: y = " << bestModelMAE.getSlope() << " x + " << bestModelMAE.getIntercept() << "\n";
+        std::cout << "  Ecuacion del modelo: y = " << bestModelMAE.getSlope() << " x + " << bestModelMAE.getIntercept() << "\n";
         std::cout << "  MAE: " << bestModelMAE.getMAE() << "\n";
     } catch (const std::exception& e) {
         std::cout << "Error al buscar el mejor modelo basado en MAE: " << e.what() << std::endl;
@@ -71,7 +71,7 @@ void EvaluationSystem<T>::printBestModels() {
     try {
         LinearRegression<T> bestModelMSE = this->dataSet.findBestModel("MSE");
         std::cout << "Mejor modelo basado en MSE:\n";
-        std::cout << "  Ecuación del modelo: y = " << bestModelMSE.getSlope() << " x + " << bestModelMSE.getIntercept() << "\n";
+        std::cout << "  Ecuacion del modelo: y = " << bestModelMSE.getSlope() << " x + " << bestModelMSE.getIntercept() << "\n";
         std::cout << "  MSE: " << bestModelMSE.getMSE() << "\n";
     } catch (const std::exception& e) {
         std::cout << "Error al buscar el mejor modelo basado en MSE: " << e.what() << std::endl;
@@ -80,7 +80,7 @@ void EvaluationSystem<T>::printBestModels() {
     try {
         LinearRegression<T> bestModelRMSE = this->dataSet.findBestModel("RMSE");
         std::cout << "Mejor modelo basado en RMSE:\n";
-        std::cout << "  Ecuación del modelo: y = " << bestModelRMSE.getSlope() << " x + " << bestModelRMSE.getIntercept() << "\n";
+        std::cout << "  Ecuacion del modelo: y = " << bestModelRMSE.getSlope() << " x + " << bestModelRMSE.getIntercept() << "\n";
         std::cout << "  RMSE: " << bestModelRMSE.getRMSE() << "\n";
     } catch (const std::exception& e) {
         std::cout << "Error al buscar el mejor modelo basado en RMSE: " << e.what() << std::endl;
