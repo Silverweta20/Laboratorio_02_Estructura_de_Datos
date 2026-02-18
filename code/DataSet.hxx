@@ -21,7 +21,22 @@ template <typename T>
 void DataSet<T>::addDataPoint(T x, T y)
 {
     // TODO #01: Implementar la inserción ordenada de puntos de datos en la estructura lineal.
-    dataPoints.push_back(DataPoint<T>(x, y));
+    int inicio = 0;
+    int fin = dataPoints.size(); // Usamos el tamaño total como límite superior
+
+    // Algoritmo de Búsqueda Binaria
+    while (inicio < fin) {
+        int medio = inicio + (fin - inicio) / 2;
+
+        if (dataPoints[medio].x < x) {
+            inicio = medio + 1; // El lugar está en la mitad derecha
+        } else {
+            fin = medio;
+        }
+    }
+
+    // Al terminar el ciclo, 'inicio' es el índice exacto donde debe ir el nuevo elemento
+    dataPoints.insert(dataPoints.begin() + inicio, DataPoint<T>(x, y));
 }
 
 /*
@@ -46,6 +61,9 @@ template <typename T>
 void DataSet<T>::evaluateModels()
 {
     // TODO #7: Implementar la función evaluateModels.
+    if (!models.empty()) {
+        models.begin()->calculateMetrics(*this);
+    }
 }
 
 /*
@@ -60,6 +78,7 @@ LinearRegression<T> DataSet<T>::findBestModel(const std::string &metric)
         throw std::runtime_error("No hay modelos disponibles para evaluar.");
     // TODO #8: Implementar la función findBestModel.
     LinearRegression<T> bestModel;
+
     return bestModel;
 }
 

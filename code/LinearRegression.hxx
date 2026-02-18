@@ -13,7 +13,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <deque>
-
+#include <list>
 /*
  * Constructor por defecto
  * -----------------------
@@ -67,6 +67,17 @@ void LinearRegression<T>::calculateMAE(const DataSet<T> &dataSet)
         throw std::runtime_error("El conjunto de datos está vacío");
     }
     // TODO #04: Implementar el cálculo de MAE.
+    typename std::list<LinearRegression<T>>::const_iterator it_models = dataSet.models.begin();
+    typename std::deque<DataPoint<T>>::const_iterator it_dataPoints;
+    for (;it_models != dataSet.models.end();it_models++) {
+        const_cast<LinearRegression<T>&>(*it_models).MAE = 0;
+        for (it_dataPoints= dataSet.dataPoints.begin();it_dataPoints != dataSet.dataPoints.end();it_dataPoints++) {
+            DataPoint<T> dataPoint = *it_dataPoints;
+             const_cast<LinearRegression<T>&>(*it_models).MAE+= std::abs(dataPoint.y - it_models -> predict(dataPoint).y);
+        }
+        const_cast<LinearRegression<T>&>(*it_models).MAECalculated = true;
+        const_cast<LinearRegression<T>&>(*it_models).MAE = (*it_models).MAE/dataSet.dataPoints.size();
+    }
 }
 
 /*
@@ -83,6 +94,17 @@ void LinearRegression<T>::calculateMSE(const DataSet<T> &dataSet)
         throw std::runtime_error("El conjunto de datos está vacío");
     }
     // TODO #05: Implementar el cálculo de MSE.
+    typename std::list<LinearRegression<T>>::const_iterator it_models = dataSet.models.begin();
+    typename std::deque<DataPoint<T>>::const_iterator it_dataPoints;
+    for (;it_models != dataSet.models.end();it_models++) {
+        const_cast<LinearRegression<T>&>(*it_models).MSE = 0;
+        for (it_dataPoints= dataSet.dataPoints.begin();it_dataPoints != dataSet.dataPoints.end();it_dataPoints++) {
+            DataPoint<T> dataPoint = *it_dataPoints;
+            const_cast<LinearRegression<T>&>(*it_models).MSE+= std::pow(dataPoint.y - it_models -> predict(dataPoint).y,2);
+        }
+        const_cast<LinearRegression<T>&>(*it_models).MSECalculated = true;
+        const_cast<LinearRegression<T>&>(*it_models).MSE = (*it_models).MSE/dataSet.dataPoints.size();
+    }
 }
 
 /*
@@ -99,6 +121,18 @@ void LinearRegression<T>::calculateRMSE(const DataSet<T> &dataSet)
         throw std::runtime_error("El conjunto de datos está vacío");
     }
     // TODO #06: Implementar el cálculo de RMSE.
+    typename std::list<LinearRegression<T>>::const_iterator it_models = dataSet.models.begin();
+    typename std::deque<DataPoint<T>>::const_iterator it_dataPoints;
+    for (;it_models != dataSet.models.end();it_models++) {
+        const_cast<LinearRegression<T>&>(*it_models).RMSE = 0;
+        for (it_dataPoints= dataSet.dataPoints.begin();it_dataPoints != dataSet.dataPoints.end();it_dataPoints++) {
+            DataPoint<T> dataPoint = *it_dataPoints;
+            const_cast<LinearRegression<T>&>(*it_models).RMSE+= std::pow(dataPoint.y - it_models -> predict(dataPoint).y,2);
+        }
+        const_cast<LinearRegression<T>&>(*it_models).RMSE = (*it_models).RMSE/dataSet.dataPoints.size();\
+        const_cast<LinearRegression<T>&>(*it_models).RMSE = sqrt((*it_models).RMSE);
+        const_cast<LinearRegression<T>&>(*it_models).RMSECalculated = true;
+    }
 }
 
 /*
@@ -110,6 +144,7 @@ template <typename T>
 DataPoint<T> LinearRegression<T>::predict(const DataPoint<T> &inputPoint) const
 {
     // TODO #03: Implementar la función predict.
+    return DataPoint<T>(inputPoint.x, inputPoint.x*slope + intercept);;
 }
 
 /*

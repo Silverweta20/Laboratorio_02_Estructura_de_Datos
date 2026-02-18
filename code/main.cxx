@@ -12,7 +12,7 @@
 
 void readDataPoints(std::ifstream &inputFile, EvaluationSystem<double> &system, int N)
 {
-    for (int i = 0; i < N; ++i)
+    for (int i = 0; i < N; i++)
     {
         double x, y;
         inputFile >> x >> y;
@@ -21,7 +21,7 @@ void readDataPoints(std::ifstream &inputFile, EvaluationSystem<double> &system, 
 }
 
 void ReadModels (std::ifstream &inputFile, EvaluationSystem<double> &system, int P) {
-    for (int i = 0; i < P; ++i)
+    for (int i = 0; i < P; i++)
     {
         double M, B;
         inputFile >> M >> B;
