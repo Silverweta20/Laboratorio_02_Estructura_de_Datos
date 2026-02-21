@@ -78,6 +78,38 @@ LinearRegression<T> DataSet<T>::findBestModel(const std::string &metric)
         throw std::runtime_error("No hay modelos disponibles para evaluar.");
     // TODO #8: Implementar la función findBestModel.
     LinearRegression<T> bestModel;
+    typename std::list <LinearRegression<T>>::iterator iter = models.begin();
+    double bestValue;
+    if (metric == "MAE") {
+        bestValue = iter->getMAE();
+        for(; iter != models.end(); ++iter) {
+            if (iter->getMAE() < bestValue) {
+                bestValue = iter->getMAE();
+                bestModel = *iter;
+            }
+        }
+
+    }else if (metric == "MSE") {
+        bestValue = iter->getMSE();
+        for(; iter != models.end(); ++iter) {
+            if (iter->getMSE() < bestValue) {
+                bestValue = iter->getMSE();
+                bestModel = *iter;
+            }
+        }
+
+    }else if (metric == "RMSE") {
+        bestValue = iter->getRMSE();
+        for(; iter != models.end(); ++iter) {
+            if (iter->getRMSE() < bestValue) {
+                bestValue = iter->getRMSE();
+                bestModel = *iter;
+            }
+        }
+
+    }else {
+        throw std::invalid_argument("Métrica no reconocida: " + metric);
+    }
 
     return bestModel;
 }

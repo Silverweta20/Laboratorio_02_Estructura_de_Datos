@@ -42,7 +42,7 @@ LinearRegression<T>::LinearRegression(double slope, double intercept) : slope(sl
  * Lanza una excepción si el conjunto de datos está vacío.
  */
 template <typename T>
-void LinearRegression<T>::calculateMetrics(DataSet<T> dataSet)
+void LinearRegression<T>::calculateMetrics(DataSet<T> &dataSet)
 {
     if (dataSet.dataPoints.empty())
     {
@@ -60,23 +60,23 @@ void LinearRegression<T>::calculateMetrics(DataSet<T> dataSet)
  * Lanza una excepción si el conjunto de datos está vacío.
  */
 template <typename T>
-void LinearRegression<T>::calculateMAE(const DataSet<T> &dataSet)
+void LinearRegression<T>::calculateMAE(DataSet<T> &dataSet)
 {
     if (dataSet.dataPoints.empty())
     {
         throw std::runtime_error("El conjunto de datos está vacío");
     }
     // TODO #04: Implementar el cálculo de MAE.
-    typename std::list<LinearRegression<T>>::const_iterator it_models = dataSet.models.begin();
-    typename std::deque<DataPoint<T>>::const_iterator it_dataPoints;
+    typename std::list<LinearRegression<T>>::iterator it_models = dataSet.models.begin();
+    typename std::deque<DataPoint<T>>::iterator it_dataPoints;
     for (;it_models != dataSet.models.end();it_models++) {
-        const_cast<LinearRegression<T>&>(*it_models).MAE = 0;
-        for (it_dataPoints= dataSet.dataPoints.begin();it_dataPoints != dataSet.dataPoints.end();it_dataPoints++) {
-            DataPoint<T> dataPoint = *it_dataPoints;
-             const_cast<LinearRegression<T>&>(*it_models).MAE+= std::abs(dataPoint.y - it_models -> predict(dataPoint).y);
+        double sumAbsoluteError = 0.0;
+        for (it_dataPoints = dataSet.dataPoints.begin();it_dataPoints != dataSet.dataPoints.end();it_dataPoints++) {
+             sumAbsoluteError += std::abs(it_dataPoints->y - it_models -> predict(*it_dataPoints).y);
         }
-        const_cast<LinearRegression<T>&>(*it_models).MAECalculated = true;
-        const_cast<LinearRegression<T>&>(*it_models).MAE = (*it_models).MAE/dataSet.dataPoints.size();
+        double finalMAE = sumAbsoluteError /dataSet.dataPoints.size();
+        it_models->setMAE(finalMAE);
+        it_models->setMAECalculated(true);
     }
 }
 
@@ -87,23 +87,23 @@ void LinearRegression<T>::calculateMAE(const DataSet<T> &dataSet)
  * Lanza una excepción si el conjunto de datos está vacío.
  */
 template <typename T>
-void LinearRegression<T>::calculateMSE(const DataSet<T> &dataSet)
+void LinearRegression<T>::calculateMSE(DataSet<T> &dataSet)
 {
     if (dataSet.dataPoints.empty())
     {
         throw std::runtime_error("El conjunto de datos está vacío");
     }
     // TODO #05: Implementar el cálculo de MSE.
-    typename std::list<LinearRegression<T>>::const_iterator it_models = dataSet.models.begin();
-    typename std::deque<DataPoint<T>>::const_iterator it_dataPoints;
+    typename std::list<LinearRegression<T>>::iterator it_models = dataSet.models.begin();
+    typename std::deque<DataPoint<T>>::iterator it_dataPoints;
     for (;it_models != dataSet.models.end();it_models++) {
-        const_cast<LinearRegression<T>&>(*it_models).MSE = 0;
+        double sumSquaredError = 0.0;
         for (it_dataPoints= dataSet.dataPoints.begin();it_dataPoints != dataSet.dataPoints.end();it_dataPoints++) {
-            DataPoint<T> dataPoint = *it_dataPoints;
-            const_cast<LinearRegression<T>&>(*it_models).MSE+= std::pow(dataPoint.y - it_models -> predict(dataPoint).y,2);
+            sumSquaredError += std::pow(it_dataPoints->y - it_models -> predict(*it_dataPoints).y,2);
         }
-        const_cast<LinearRegression<T>&>(*it_models).MSECalculated = true;
-        const_cast<LinearRegression<T>&>(*it_models).MSE = (*it_models).MSE/dataSet.dataPoints.size();
+        double finalMSE = sumSquaredError / dataSet.dataPoints.size();
+        it_models->setMSE(finalMSE);
+        it_models->setMSECalculated(true);
     }
 }
 
@@ -114,24 +114,24 @@ void LinearRegression<T>::calculateMSE(const DataSet<T> &dataSet)
  * Lanza una excepción si el conjunto de datos está vacío.
  */
 template <typename T>
-void LinearRegression<T>::calculateRMSE(const DataSet<T> &dataSet)
+void LinearRegression<T>::calculateRMSE(DataSet<T> &dataSet)
 {
     if (dataSet.dataPoints.empty())
     {
         throw std::runtime_error("El conjunto de datos está vacío");
     }
     // TODO #06: Implementar el cálculo de RMSE.
-    typename std::list<LinearRegression<T>>::const_iterator it_models = dataSet.models.begin();
-    typename std::deque<DataPoint<T>>::const_iterator it_dataPoints;
+    typename std::list<LinearRegression<T>>::iterator it_models = dataSet.models.begin();
+    typename std::deque<DataPoint<T>>::iterator it_dataPoints;
     for (;it_models != dataSet.models.end();it_models++) {
-        const_cast<LinearRegression<T>&>(*it_models).RMSE = 0;
+        double sumAbsoluteError = 0.0;
         for (it_dataPoints= dataSet.dataPoints.begin();it_dataPoints != dataSet.dataPoints.end();it_dataPoints++) {
-            DataPoint<T> dataPoint = *it_dataPoints;
-            const_cast<LinearRegression<T>&>(*it_models).RMSE+= std::pow(dataPoint.y - it_models -> predict(dataPoint).y,2);
+            sumAbsoluteError += std::pow(it_dataPoints->y - it_models -> predict(*it_dataPoints).y,2);
         }
-        const_cast<LinearRegression<T>&>(*it_models).RMSE = (*it_models).RMSE/dataSet.dataPoints.size();\
-        const_cast<LinearRegression<T>&>(*it_models).RMSE = sqrt((*it_models).RMSE);
-        const_cast<LinearRegression<T>&>(*it_models).RMSECalculated = true;
+        double finalRMSE = sumAbsoluteError /dataSet.dataPoints.size();
+        finalRMSE = sqrt(finalRMSE);
+        it_models->setRMSE(finalRMSE);
+        it_models->setRMSECalculated(true);
     }
 }
 
@@ -188,7 +188,38 @@ double LinearRegression<T>::getRMSE() const
         throw std::logic_error("RMSE no ha sido calculado");
     return RMSE;
 }
-
+template <typename T>
+void LinearRegression<T>::setSlope(double slope) {
+    this->slope = slope;
+}
+template <typename T>
+void LinearRegression<T>::setIntercept(double intercept) {
+    this->intercept = intercept;
+}
+template <typename T>
+void LinearRegression<T>::setMAE(double MAE2) {
+    this->MAE = MAE2;
+}
+template <typename T>
+void LinearRegression<T>::setMSE(double MSE) {
+    this->MSE = MSE;
+}
+template <typename T>
+void LinearRegression<T>::setRMSE(double RMSE) {
+    this->RMSE = RMSE;
+}
+template <typename T>
+void LinearRegression<T>::setMAECalculated(bool MAECalculated) {
+    this->MAECalculated = MAECalculated;
+}
+template <typename T>
+void LinearRegression<T>::setMSECalculated(bool MSECalculated) {
+    this->MSECalculated = MSECalculated;
+}
+template <typename T>
+void LinearRegression<T>::setRMSECalculated(bool RMSECalculated) {
+    this->RMSECalculated = RMSECalculated;
+}
 /*
  * Implementación de los métodos para verificar las métricas
  * ----------------------------------------------------------

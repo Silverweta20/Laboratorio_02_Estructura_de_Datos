@@ -45,26 +45,34 @@ public:
     LinearRegression(double slope, double intercept);
 
     // Método para calcular métricas de error basadas en un conjunto de datos
-    void calculateMetrics(DataSet<T> dataSet);
+    void calculateMetrics(DataSet<T> &dataSet);
 
     // Método para calcular la métrica MAE basada en un conjunto de datos
-    void calculateMAE(const DataSet<T> &dataSet);
+    void calculateMAE( DataSet<T> &dataSet);
 
     // Método para calcular la métrica MSE basada en un conjunto de datos
-    void calculateMSE(const DataSet<T> &dataSet);
+    void calculateMSE(DataSet<T> &dataSet);
 
     // Método para calcular la métrica RMSE basada en un conjunto de datos
-    void calculateRMSE(const DataSet<T> &dataSet);
+    void calculateRMSE( DataSet<T> &dataSet);
 
     // Método para predecir un valor basado en un DataPoint
     DataPoint<T> predict(const DataPoint<T> &inputPoint) const;
 
-    // Métodos getter para acceder a los coeficientes y métricas
+    // Métodos getter y setters para acceder a los coeficientes y métricas
     double getSlope() const;
     double getIntercept() const;
     double getMAE() const;
     double getMSE() const;
     double getRMSE() const;
+    void setSlope(double slope);
+    void setIntercept(double intercept);
+    void setMAE(double MAE);
+    void setMSE(double MSE);
+    void setRMSE(double RMSE);
+    void setMAECalculated(bool MAECalculated);
+    void setMSECalculated(bool MSECalculated);
+    void setRMSECalculated(bool RMSECalculated);
 
     // Métodos para verificar si cada métrica está calculada
     bool isMAECalculated() const;

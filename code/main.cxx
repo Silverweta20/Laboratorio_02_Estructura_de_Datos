@@ -85,13 +85,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
-void readModels(std::ifstream &inputFile, EvaluationSystem<double> &system, int P)
-{
-    for (int i = 0; i < P; ++i)
-    {
-        double m, b;
-        inputFile >> m >> b;
-        system.addModel(m, b);
-    }
-}
